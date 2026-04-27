@@ -1,38 +1,191 @@
-# AI_LOG.md
+#  AI_LOG.md
 
-## Tools used
-- **Gemini (1.5 Pro/Flash):** Used for architectural planning, code generation, and complex debugging.
-- **Ollama (Local):** The primary runtime engine used for local LLM inference (Llama 3.1 8B) and embeddings (nomic-embed-text).
-- **Streamlit Docs:** Referenced for session state and UI management.
+## Project: AI Finance Assistant (RAG-based Chatbot using Ollama + FAISS + Streamlit)
 
-## Significant prompts
-1. **Prompt:** "Create a Streamlit chatbot using Ollama that only performs math calculations. Use FAISS for a local knowledge base (RAG) and Pydantic for structured tool output."
-   - **AI produced:** A basic structure with `ollama.chat`, a simple FAISS index, and Pydantic schemas.
-   - **Kept/Rejected:** Kept the Pydantic-to-tool mapping. Rejected the standard chat loop in favor of a streaming container to improve perceived speed.
+---
 
-2. **Prompt:** "The AI is confusing Simple Interest with Compound Interest. How can I fix the RAG retrieval?"
-   - **AI produced:** Suggestions to use different indices or more complex metadata filtering.
-   - **Kept/Rejected:** Rejected metadata filtering as it overcomplicated the "Tech Constraints." Instead, I kept the suggestion to "contrast" the text in the Knowledge Base (e.g., adding "This is NOT compound interest" to the Simple Interest entry).
+##  Project Duration
 
-3. **Prompt:** "Fix AttributeError: st.session_state has no attribute 'messages'. It happens on the first run."
-   - **AI produced:** A snippet to initialize the list inside the chat input block.
-   - **Kept/Rejected:** Rejected. I moved the initialization to the very top of `app.py`. Streamlit's top-to-bottom execution requires state to be ready before any UI elements attempt to append to it.
+**Thursday, 23 April 2026 → Monday, 27 April 2026**
 
-4. **Prompt:** "Optimize the code for a 5-8 second response time on a local machine."
-   - **AI produced:** Recommended reducing `num_predict` and switching to a smaller model (Llama 3.2).
-   - **Kept/Rejected:** Kept both. Reducing max tokens and using the 3B model significantly hit the target latency.
+---
 
-## A bug your AI introduced
-**The "Unit-in-Calculator" Bug:**
-The AI suggested a `general_calculator` tool that used a raw `eval(expression)`. However, when a user asked "100 meters to km", the AI would pass the string `"100/1000 meters"` to the tool. Because the tool didn't strip the word "meters," it threw a `SyntaxError` in Python. I caught this by seeing "Calculation error" in the UI. I fixed it by adding a Regex cleaner (`re.sub(r'[^0-9+\-*/().]', '', expression)`) to ensure only math-safe characters reached the evaluator.
+##  Tools Used
 
-## A design choice you made against AI suggestion
-**Hardcoded Guardrails vs. LLM Guardrails:**
-The AI initially suggested using a "Supervisor" LLM call to determine if a prompt was math-related or "off-topic" (like asking for the bot's name). I ignored this because it would double the response time (two LLM calls instead of one). Instead, I implemented a Python-based keyword check (`is_unrelated` and `is_math_query`) at the start of the chat logic. This provides an **instant** (0s latency) rejection of off-topic questions without wasting GPU resources.
+* **Gemini / Ollama**
+  Used for architectural planning, local LLM tool-calling logic, and RAG implementation
 
-## Time split
-- **Prompting & Architecture:** 25%
-- **Reviewing & Refining AI Output:** 20%
-- **Debugging (State & Tool Logic):** 30%
-- **Testing (Edge cases/Unit conversions):** 15%
-- **Reading Documentation (Ollama API/FAISS):** 10%
+* **VS Code**
+  Used as the primary editor for Python development and environment management
+
+---
+
+##  Significant Prompts
+
+---
+
+###  1. Date: Thursday, 23 April 2026
+
+**Prompt:**
+"Create a Calculator Bot using Streamlit and Ollama that handles quadratic equations and hypotenuse math."
+
+**What AI produced:**
+
+* Basic Streamlit chat interface
+* Python functions for math logic
+* Standard LLM-based responses
+
+**What I kept:**
+
+* Streamlit UI structure
+* Math functions
+
+**What I rejected:**
+
+* Standard LLM responses for math
+
+**Reason:**
+LLM-generated math answers were often inaccurate, so a structured **tool-calling approach** was used instead.
+
+---
+
+###  2. Date: Friday, 24 April 2026
+
+**Prompt:**
+"Implement a RAG system using FAISS and nomic-embed-text for a math knowledge base."
+
+**What AI produced:**
+
+* Embedding logic for formulas
+* FAISS-based similarity search
+* Context retrieval system
+
+**What I kept:**
+
+* FAISS index
+* Embedding logic
+
+**What I rejected:**
+
+* External vector databases
+
+**Reason:**
+Needed a **local, in-process setup** for simplicity and performance.
+
+---
+
+###  3. Date: Saturday, 25 April 2026
+
+**Prompt:**
+"Add support for Simple and Compound Interest calculations with Pydantic schemas."
+
+**What AI produced:**
+
+* Pydantic models
+* Tools for Simple Interest (SI) and Compound Interest (CI)
+
+**What I kept:**
+
+* Both SI and CI calculation tools
+
+**What I rejected:**
+
+* Combining both into a single tool
+
+**Reason:**
+Keeping them separate improved **RAG retrieval accuracy**.
+
+---
+
+###  4. Date: Sunday, 26 April 2026
+
+**Prompt:**
+"The chatbot is explaining the math instead of just giving the answer. Fix the system prompt."
+
+**What AI produced:**
+
+* Updated system instructions
+* Enforced tool-only responses
+
+**What I kept:**
+
+* "Do not define terms" instruction
+
+**What I rejected:**
+
+* Long response templates
+
+**Reason:**
+Needed **clean, fast, and minimal output**.
+
+---
+
+###  5. Date: Monday, 27 April 2026
+
+**Prompt:**
+"Fix the calculation error when users type units like 'ml' or 'cm' in the general calculator."
+
+**What AI produced:**
+
+* Complex NLP parser for unit detection
+
+**What I kept:**
+
+* Idea of cleaning user input
+
+**What I rejected:**
+
+* Complex NLP parsing logic
+
+**Reason:**
+To reduce latency and maintain simplicity, implemented a **Regex-based filter** instead.
+
+---
+
+##  Bug Introduced by AI
+
+** Date:** Saturday, 25 April 2026
+
+**Issue:**
+Both Simple Interest and Compound Interest tools had the same description.
+This caused the model to call the **Compound Interest tool** even when Simple Interest was requested.
+
+**How I identified:**
+
+* Tested Simple Interest query
+* Output was unexpectedly high (compound effect)
+
+**Fix:**
+
+* Updated tool descriptions
+* Added clear distinction:
+  **"This is NOT compound interest"**
+
+---
+
+##  Design Decision Against AI
+
+** Date:** Sunday, 26 April 2026
+
+**AI Suggestion:**
+Use a second LLM as a **Supervisor** to filter unrelated queries
+
+**Decision:**
+Used a **Python-based keyword check** instead
+
+**Reason:**
+
+* LLM call: ~5–8 seconds
+* Python check: Instant
+
+Result: **Better speed and efficiency**
+
+---
+
+##  Time Distribution
+
+* Writing code: **40%**
+* Prompting AI tools: **15%**
+* Reviewing AI output: **15%**
+* Debugging: **20%**
+* Testing: **10%**
