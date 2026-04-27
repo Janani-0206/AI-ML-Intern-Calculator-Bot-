@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Calculator Bot
 
 A Streamlit-based AI Math Assistant that uses advanced AI to answer math questions, perform calculations, and provide educational explanations.
@@ -58,3 +59,7 @@ A Streamlit-based AI Math Assistant that uses advanced AI to answer math questio
 - "Solve x² - 5x + 6 = 0"
 - "Calculate compound interest on 1000 at 5% for 2 years"
 - "What is the Pythagorean theorem?"
+=======
+# AI-ML-Intern-Calculator-Bot-
+AI/ML Developer Internship Variant B to develop a chatbot with Tool/function call and use
+>>>>>>> ef50212e78e94407a62b63d4556fd024d4548e97
