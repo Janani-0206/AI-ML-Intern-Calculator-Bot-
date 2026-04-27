@@ -2,13 +2,9 @@
 
 ## Project: AI Finance Assistant (RAG-based Chatbot using Ollama + FAISS + Streamlit)
 
----
-
 ##  Project Duration
 
 **Thursday, 23 April 2026 → Monday, 27 April 2026**
-
----
 
 ##  Tools Used
 
@@ -18,11 +14,7 @@
 * **VS Code**
   Used as the primary editor for Python development and environment management
 
----
-
 ##  Significant Prompts
-
----
 
 ###  1. Date: Thursday, 23 April 2026
 
@@ -47,8 +39,6 @@
 **Reason:**
 LLM-generated math answers were often inaccurate, so a structured **tool-calling approach** was used instead.
 
----
-
 ###  2. Date: Friday, 24 April 2026
 
 **Prompt:**
@@ -72,8 +62,6 @@ LLM-generated math answers were often inaccurate, so a structured **tool-calling
 **Reason:**
 Needed a **local, in-process setup** for simplicity and performance.
 
----
-
 ###  3. Date: Saturday, 25 April 2026
 
 **Prompt:**
@@ -94,8 +82,6 @@ Needed a **local, in-process setup** for simplicity and performance.
 
 **Reason:**
 Keeping them separate improved **RAG retrieval accuracy**.
-
----
 
 ###  4. Date: Sunday, 26 April 2026
 
@@ -118,8 +104,6 @@ Keeping them separate improved **RAG retrieval accuracy**.
 **Reason:**
 Needed **clean, fast, and minimal output**.
 
----
-
 ###  5. Date: Monday, 27 April 2026
 
 **Prompt:**
@@ -140,8 +124,6 @@ Needed **clean, fast, and minimal output**.
 **Reason:**
 To reduce latency and maintain simplicity, implemented a **Regex-based filter** instead.
 
----
-
 ##  Bug Introduced by AI
 
 ** Date:** Saturday, 25 April 2026
@@ -161,8 +143,6 @@ This caused the model to call the **Compound Interest tool** even when Simple In
 * Added clear distinction:
   **"This is NOT compound interest"**
 
----
-
 ##  Design Decision Against AI
 
 ** Date:** Sunday, 26 April 2026
@@ -179,8 +159,6 @@ Used a **Python-based keyword check** instead
 * Python check: Instant
 
 Result: **Better speed and efficiency**
-
----
 
 ##  Time Distribution
 
